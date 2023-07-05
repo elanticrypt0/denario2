@@ -40,24 +40,25 @@ async fn main() -> std::io::Result<()> {
               .allowed_header(http::header::CONTENT_TYPE)
               .max_age(3600);
         App::new()
+            // .app_datata()
             .wrap(cors)
             // app_setup
             .service(app::app_setup::app_run_setup)
             .service(app::app_status::app_check_status)
             // Features
-              // categories
+                // categories
             .service(features::categories::find_all)
             .service(features::categories::find_one)
             .service(features::categories::create)
             .service(features::categories::update)
             .service(features::categories::delete)
-              // records
+                // records
             .service(features::records::find_all)
             .service(features::records::find_one)
             .service(features::records::create)
             .service(features::records::update)
             .service(features::records::delete)
-              // credits
+                // credits
             .service(features::credits::find_all)
             .service(features::credits::find_one)
             .service(features::credits::create)

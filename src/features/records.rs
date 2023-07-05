@@ -18,7 +18,7 @@ pub async fn find_all() -> impl Responder {
 }
 
 #[get("/records/{id}")]
-pub async fn find_one(id: i32) -> impl Responder {
+pub async fn find_one() -> impl Responder {
     let fcore=FeatureCore::load();
     let credits = find_all();
     return credits[id as usize].clone();
@@ -29,7 +29,7 @@ pub async fn find_one(id: i32) -> impl Responder {
 }
 
 #[post("/records")]
-pub async fn create(credit: String) -> impl Responder {
+pub async fn create() -> impl Responder {
     let fcore=FeatureCore::load();
     // let mut credits = find_all();
     // credits.push(credit);
@@ -41,7 +41,7 @@ pub async fn create(credit: String) -> impl Responder {
 }
 
 #[patch("/records/{id}")]
-pub async fn update(id: i32, credit: String) -> impl Responder {
+pub async fn update() -> impl Responder {
     let fcore=FeatureCore::load();
     // let mut credits = find_all();
     // credits[id as usize] = credit;
@@ -53,7 +53,7 @@ pub async fn update(id: i32, credit: String) -> impl Responder {
 }
 
 #[delete("/records/{id}")]
-pub async fn delete(id: i32) -> impl Responder {
+pub async fn delete() -> impl Responder {
     let fcore=FeatureCore::load();
     // let mut credits = find_all();
     // credits.remove(id as usize);

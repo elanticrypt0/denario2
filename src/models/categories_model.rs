@@ -2,7 +2,7 @@ use diesel::prelude::*;
 use chrono::{NaiveDateTime};
 use serde::{Serialize, Deserialize};
 
-use crate::app::db_conn::establish_connection;
+use crate::core::db_manager_core::connection;
 use crate::schema::categories::dsl::*;
 
 #[derive(Insertable,Queryable, Selectable,Serialize,AsChangeset,Deserialize,Debug,Clone)]
