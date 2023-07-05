@@ -7,10 +7,10 @@ use actix_web::{App, HttpServer };
 mod schema;
 
 // Application
+use crate::core::app_core_config::{app_load_config};
+mod app;
 mod core;
 mod features;
-mod app;
-use app::app_config::app_load_config;
 mod models;
 
 
