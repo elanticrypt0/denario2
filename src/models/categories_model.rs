@@ -1,8 +1,8 @@
 use diesel::prelude::*;
-use chrono::{NaiveDateTime};
+use chrono::{NaiveDateTime, Utc};
 use serde::{Serialize, Deserialize};
 
-use crate::core::db_manager_core::connection;
+use crate::core::db_manager_core::postgres_establish_connection;
 use crate::schema::categories::dsl::*;
 
 #[derive(Insertable,Queryable, Selectable,Serialize,AsChangeset,Deserialize,Debug,Clone)]
@@ -17,12 +17,22 @@ pub struct Category{
 }
 
 impl Category{
+
+    pub fn new(category_name:String) -> Self{
+        Self {
+            id          :   0,
+            name        :   category_name,
+            created_at  :   Utc::now().naive_utc(),
+            updated_at  :   Utc::now().naive_utc(),
+            is_deleted  :   false
+        }
+    }
+
     pub fn find_all() -> Vec<Category> {
-        let mut conn=establish_connection();
-        let results = categories
-            .filter(is_deleted.eq(false))
-            .load::<Category>(&conn)
-            .expect("Error loading categories");
+        let mut conn=postgres_establish_connection().clone();
+        
+        let result= categories.load::<Category>(&mut conn).expect("Fail to read table");
+
         return results;
     }
 

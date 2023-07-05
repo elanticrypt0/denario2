@@ -8,6 +8,7 @@ mod schema;
 
 // Application
 use crate::core::app_core_config::{app_load_config};
+use crate::core::db_manager_core::postgres_establish_connection;
 mod app;
 mod core;
 mod features;
@@ -28,6 +29,8 @@ async fn main() -> std::io::Result<()> {
 
     app_print_welcome(&config.app_server_host,config.app_server_port,&config.app_name,&config.app_version);
 
+    let db_conn=postgres_establish_connection();
+
     HttpServer::new(move || {
         // CORS
         let cors = Cors::default()
@@ -40,7 +43,7 @@ async fn main() -> std::io::Result<()> {
               .allowed_header(http::header::CONTENT_TYPE)
               .max_age(3600);
         App::new()
-            // .app_datata()
+            .app_data(db_conn)
             .wrap(cors)
             // app_setup
             .service(app::app_setup::app_run_setup)

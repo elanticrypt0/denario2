@@ -1,6 +1,9 @@
-use actix_web::{Responder, HttpResponse, get,post,patch,delete};
+use actix_web::{Responder, HttpResponse, get,post,patch,delete, web::Data};
+use diesel::{PgConnection, r2d2::ConnectionManager};
+use r2d2::{Pool};
 
 use crate::core::feature_core::FeatureCore;
+use crate::models::categories_model::Category;
 
 #[get("/categories")]
 pub async fn find_all() -> impl Responder {
@@ -16,48 +19,48 @@ pub async fn find_all() -> impl Responder {
 }
 
 #[get("/categories/{id}")]
-pub async fn find_one() -> impl Responder {
-    let fcore=FeatureCore::load();
-    let credits = find_all();
-    return credits[id as usize].clone();
+pub async fn find_one(pool: Data<Pool<ConnectionManager<PgConnection>>>) -> impl Responder {
+    let conn=pool.get().expect("Cant connect to DB");
+
+    
     
     HttpResponse::Ok().json({
         credits
     })
 }
 
-#[post("/categories")]
-pub async fn create(credit: String) -> impl Responder {
-    let fcore=FeatureCore::load();
-    // let mut credits = find_all();
-    // credits.push(credit);
-    // return credits[credits.len() - 1].clone();
+// #[post("/categories")]
+// pub async fn create(req_body: String, pool: Data<Pool<ConnectionManager<PgConnection>>>) -> impl Responder {
 
-    HttpResponse::Ok().json({
-        credits
-    })
-}
+//     let fcore=FeatureCore::load();
+    
+    
 
-#[patch("/categories/{id}")]
-pub async fn update() -> impl Responder {
-    let fcore=FeatureCore::load();
-    // let mut credits = find_all();
-    // credits[id as usize] = credit;
-    // return credits[id as usize].clone();
+//     HttpResponse::Ok().json({
+//         credits
+//     })
+// }
 
-    HttpResponse::Ok().json({
-        credits
-    })
-}
+// #[patch("/categories/{id}")]
+// pub async fn update(pool: Data<Pool<ConnectionManager<PgConnection>>>) -> impl Responder {
+//     let fcore=FeatureCore::load();
+//     // let mut credits = find_all();
+//     // credits[id as usize] = credit;
+//     // return credits[id as usize].clone();
 
-#[delete("/categories/{id}")]
-pub async fn delete() -> impl Responder {
-    let fcore=FeatureCore::load();
-    // let mut credits = find_all();
-    // credits.remove(id as usize);
-    // return credits[id as usize].clone();
+//     HttpResponse::Ok().json({
+//         credits
+//     })
+// }
 
-    HttpResponse::Ok().json({
-        credits
-    })
-}
+// #[delete("/categories/{id}")]
+// pub async fn delete(pool: Data<Pool<ConnectionManager<PgConnection>>>) -> impl Responder {
+//     let fcore=FeatureCore::load();
+//     // let mut credits = find_all();
+//     // credits.remove(id as usize);
+//     // return credits[id as usize].clone();
+
+//     HttpResponse::Ok().json({
+//         credits
+//     })
+// }

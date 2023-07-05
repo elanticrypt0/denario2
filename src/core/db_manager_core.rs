@@ -1,31 +1,25 @@
+use dotenvy::dotenv;
+use std::env;
 // use crate::error_handler::CustomError;
 use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
-use lazy_static::lazy_static;
 use r2d2::*;
-use std::env;
 
-type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
-
-pub type Db.dConnection = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
-
-embed_migrations!();
-
-lazy_static! {
-    static ref POOL: Pool = {
-        let db_url = env::var("DATABASE_URL").expect("Database url not set");
-        let manager = ConnectionManager::<PgConnection>::new(db_url);
-        Pool::new(manager).expect("Failed to create db pool")
-    };
+pub fn postgres_establish_connection() -> Pool<ConnectionManager<PgConnection>>{
+    let db_url=load_config("POSGRES_URL");
+    return get_pool_pgconnection(db_url);
 }
 
-pub fn init() {
-    lazy_static::initialize(&POOL);
-    let conn = connection().expect("Failed to get db connection");
-    embedded_migrations::run(&conn).unwrap();
+fn load_config(connection_name: &str) -> String{
+    dotenv().ok();
+    let db_url=env::var(connection_name).expect("DATABASE_URL not found in config");
+    return db_url
 }
 
-pub fn connection() -> Result<DbConnection, CustomError> {
-    POOL.get()
-        .map_err(|e| CustomError::new(500, format!("Failed getting db connection: {}", e)))
+// Conección a PosgresSQL
+fn get_pool_pgconnection(db_url: String) -> Pool<ConnectionManager<PgConnection>>{
+    let manager=ConnectionManager::<PgConnection>::new(db_url);
+    let pool=Pool::builder().build(manager).expect("Cant connect to DB");
+
+    return pool;
 }
