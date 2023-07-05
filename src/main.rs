@@ -7,6 +7,7 @@ use actix_web::{App, HttpServer };
 mod schema;
 
 // Application
+mod core;
 mod features;
 mod app;
 use app::app_config::app_load_config;

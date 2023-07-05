@@ -2,7 +2,7 @@ use dotenv::dotenv;
 use std::{env};
 
 #[derive(Debug, Clone)]
-pub struct AppConfig{
+pub struct AppCoreConfig{
     pub app_setup_eneabled: bool,
     pub app_debug_mode: bool,
     pub app_server_host: String,
@@ -13,7 +13,7 @@ pub struct AppConfig{
     pub app_env: String,
 }
 
-impl AppConfig {
+impl AppCoreConfig {
     pub fn new() -> Self {
         dotenv().ok();
         let app_setup_eneabled = env::var("APP_SETUP_ENABLED").expect("APP_SETUP must be set") == "true";
@@ -30,6 +30,6 @@ impl AppConfig {
     }
 }
 
-pub fn app_load_config() -> AppConfig {
-    return AppConfig::new();
+pub fn app_load_config() -> AppCoreConfig {
+    return AppCoreConfig::new();
 }
