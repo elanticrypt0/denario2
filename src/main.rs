@@ -44,6 +44,25 @@ async fn main() -> std::io::Result<()> {
             // app_setup
             .service(app::app_setup::app_run_setup)
             .service(app::app_status::app_check_status)
+            // Features
+              // categories
+            .service(features::categories::find_all)
+            .service(features::categories::find_one)
+            .service(features::categories::create)
+            .service(features::categories::update)
+            .service(features::categories::delete)
+              // records
+            .service(features::records::find_all)
+            .service(features::records::find_one)
+            .service(features::records::create)
+            .service(features::records::update)
+            .service(features::records::delete)
+              // credits
+            .service(features::credits::find_all)
+            .service(features::credits::find_one)
+            .service(features::credits::create)
+            .service(features::credits::update)
+            .service(features::credits::delete)
             // STATIC
             .service(fs::Files::new("/","./public").index_file("index.html"))
             .wrap(Logger::default())
